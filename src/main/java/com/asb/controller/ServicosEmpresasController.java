@@ -1,7 +1,6 @@
 package com.asb.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,32 +13,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asb.dto.EmpresaDTO;
+
+import com.asb.dto.ServicosEmpresasDTO;
 import com.asb.exception.RegraNegocioException;
-import com.asb.model.entity.CadastroEscolaModel;
-import com.asb.model.entity.Empresa;
+
+import com.asb.model.entity.ServicosEmpresas;
 import com.asb.model.entity.Usuario;
-import com.asb.service.EmpresaService;
+
+import com.asb.service.ServicosEscolaService;
 import com.asb.service.UsuarioService;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/asb/empresa")
-public class EmpresaController {
-
+@RequestMapping("/asb/servicosempresas")
+public class ServicosEmpresasController {
 	@Autowired
-	private EmpresaService service;
+	private ServicosEscolaService service;
 	
 	@Autowired
 	private UsuarioService usuarioService;
 	
 	@PostMapping
-	public ResponseEntity salvar(@RequestBody EmpresaDTO dto ) { 
+	public ResponseEntity salvar(@RequestBody ServicosEmpresasDTO dto ) { 
 		try { 
-			Empresa entidade = converter(dto);
+			ServicosEmpresas entidade = converter(dto);
 			entidade = service.salvar(entidade);
 			return new ResponseEntity(entidade, HttpStatus.CREATED);
 		} catch (RegraNegocioException e){
@@ -48,21 +47,21 @@ public class EmpresaController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Empresa>> findAll(){
-		List<Empresa> empresas = service.getAllEmpresas();
-		return  ResponseEntity.ok().body(empresas);
+	public ResponseEntity<List<ServicosEmpresas>> findAll(){
+		List<ServicosEmpresas> servicosempresas = service.getAllServicosEmpresas();
+		return  ResponseEntity.ok().body(servicosempresas);
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<Empresa>getEmpresaById(@PathVariable("id") long EmpresaId) { 
-		return new ResponseEntity<Empresa>(service.getEmpresaById(EmpresaId), HttpStatus.OK);
+	public ResponseEntity<ServicosEmpresas>getServicosEmpresasById(@PathVariable("id") long ServicosEmpresasId) { 
+		return new ResponseEntity<ServicosEmpresas>(service.getServicosEmpresasById(ServicosEmpresasId), HttpStatus.OK);
 	}
 		
 
 	@PutMapping("{id}")
-	public ResponseEntity<Empresa> updateEmpresa(@PathVariable("id") long id, 
-			@RequestBody Empresa empresa){
-		return new ResponseEntity<Empresa>(service.updateEmpresa(empresa, id), HttpStatus.OK);
+	public ResponseEntity<ServicosEmpresas> updateServicosEmpresas(@PathVariable("id") long id, 
+			@RequestBody ServicosEmpresas servicosempresas){
+		return new ResponseEntity<ServicosEmpresas>(service.updateServicosEmpresas(servicosempresas, id), HttpStatus.OK);
 	}
 	
 
@@ -71,30 +70,17 @@ public class EmpresaController {
 		return service.buscarPorId(id).map(entity -> { 
 			service.deletar(entity);
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
-		}).orElseGet(() -> new ResponseEntity<String>("Empresa não encontrado", 
+		}).orElseGet(() -> new ResponseEntity<String>(" Serviços Empresa não encontrado", 
 				HttpStatus.BAD_REQUEST));
 	};
 	
 	
 	
-	private Empresa converter(EmpresaDTO dto) {
-		Empresa empresa = new Empresa();
+	private ServicosEmpresas converter(ServicosEmpresasDTO dto) {
+		ServicosEmpresas empresa = new ServicosEmpresas();
 		empresa.setId(dto.getId());
-		empresa.setRazaoSocial(dto.getRazaoSocial());
-		empresa.setCnpj(dto.getCnpj());
-		empresa.setEnderecoRua(dto.getEnderecoRua());
-		empresa.setEnderecoNumero(dto.getEnderecoNumero());
-		empresa.setEnderecoBairro(dto.getEnderecoBairro());
-		empresa.setEnderecoComplemento(dto.getEnderecoComplemento());
-		empresa.setCep(dto.getCep());
-		empresa.setCidade(dto.getCidade());
-		empresa.setEstado(dto.getEstado());
-		empresa.setNomeRepresentante(dto.getNomeRepresentante());
-		empresa.setEstado(dto.getEstado());
-		empresa.setNomeRepresentante(dto.getNomeRepresentante());
-		empresa.setEmail(dto.getEmail());
-		empresa.setTelefoneContato(dto.getTelefoneContato());
-
+		empresa.setDescricao(dto.getDescricao());
+		empresa.setServicos(dto.getServicos());
 		
 		Usuario usuario = usuarioService.buscarPorId(dto.getUsuario())
 				.orElseThrow(() -> new RegraNegocioException

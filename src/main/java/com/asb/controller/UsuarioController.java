@@ -3,6 +3,7 @@ package com.asb.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import com.asb.service.DemandaEscolaService;
 import com.asb.service.UsuarioService;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("asb/usuarios")
 public class UsuarioController {
 

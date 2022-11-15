@@ -12,7 +12,7 @@ import lombok.Setter;
 public class MonitoramentoDTO {
 
 	private Long id;
-	private String NOMEaLUNO;
+	private String nomeAluno;
 	private String descricaoMonitoramento;
 	private Integer dia;
 	private Integer mes;
